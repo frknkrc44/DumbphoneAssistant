@@ -13,8 +13,6 @@ import android.telephony.TelephonyManager;
 
 import java.util.ArrayList;
 
-import static gcardone.junidecode.Junidecode.unidecode;
-
 public class SimUtil extends Util {
 
     private final SharedPreferences settings;
@@ -142,8 +140,8 @@ public class SimUtil extends Util {
      */
     public void create(Contact newSimContact) throws Exception {
         ContentValues newSimValues = new ContentValues();
-        newSimValues.put("tag", newSimContact.getName());
-        newSimValues.put("number", newSimContact.getNumber());
+        newSimValues.put("tag", newSimContact.name);
+        newSimValues.put("number", newSimContact.number);
         Uri newSimRow = resolver.insert(simUri, newSimValues);
 
         // It is always "content://icc/adn/0" on success and null on failure
@@ -162,7 +160,7 @@ public class SimUtil extends Util {
      * @return Success or not
      */
     public boolean delete(Contact contact) {
-        String where = "tag='" + contact.getName() + "' AND number='" + contact.getNumber() + "'";
+        String where = "tag='" + contact.name + "' AND number='" + contact.number + "'";
         return resolver.delete(simUri, where, null) > 0;
     }
 
@@ -175,7 +173,7 @@ public class SimUtil extends Util {
      *         cards limits or null if there was a problem detecting the limits
      */
     public Contact convertToSimContact(Contact contact) {
-        String name = contact.getName();
+        String name = contact.name;
         boolean transliterate = this.settings.getBoolean(DumbphoneAssistantPreferenceActivity.PREFERENCE_TRANSLITERATE, false);
         boolean addTypeSuffix = this.settings.getBoolean(DumbphoneAssistantPreferenceActivity.PREFERENCE_ADD_TYPE_SUFFIX, false);
         if (transliterate) {
@@ -187,14 +185,14 @@ public class SimUtil extends Util {
                 : name
                 ;
         if (addTypeSuffix) {
-            String label = contact.getLabel();
+            String label = contact.label;
             if (transliterate) {
                 label = unidecode(label);
             }
             String firstLetter = label.substring(0, 1);
             name = name + "," + firstLetter;
         }
-        String number = contact.getNumber().replace("-", "");
+        String number = contact.number.replace("-", "");
         return new Contact(null, name, number);
     }
 }

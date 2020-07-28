@@ -28,5 +28,9 @@ public abstract class Util {
      * @param newContact The Contact object containing the name and number of the contact
      */
     public abstract void create(Contact newContact) throws Exception;
+    
+    public static String unidecode(String input) {
+        return input.replaceAll("[^\\x00-\\x7F]","");
+    }
 
 }

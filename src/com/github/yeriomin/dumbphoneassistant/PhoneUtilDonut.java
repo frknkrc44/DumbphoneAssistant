@@ -50,13 +50,13 @@ public class PhoneUtilDonut extends PhoneUtil {
     public void create(Contact newPhoneContact) throws Exception {
         // first, we have to create the contact
         ContentValues newPhoneValues = new ContentValues();
-        newPhoneValues.put(Contacts.People.NAME, newPhoneContact.getName());
+        newPhoneValues.put(Contacts.People.NAME, newPhoneContact.name);
         Uri newPhoneRow = resolver.insert(Contacts.People.CONTENT_URI, newPhoneValues);
 
         // then we have to add a number
         newPhoneValues.clear();
         newPhoneValues.put(Contacts.People.Phones.TYPE, Contacts.People.Phones.TYPE_MOBILE);
-        newPhoneValues.put(Contacts.Phones.NUMBER, newPhoneContact.getNumber());
+        newPhoneValues.put(Contacts.Phones.NUMBER, newPhoneContact.number);
         // insert the new phone number in the database using the returned uri from creating the contact
         newPhoneRow = resolver.insert(Uri.withAppendedPath(newPhoneRow, Contacts.People.Phones.CONTENT_DIRECTORY), newPhoneValues);
 
@@ -74,7 +74,7 @@ public class PhoneUtilDonut extends PhoneUtil {
 
 
     public Uri retrieveContactUri(Contact contact) {
-        String id = contact.getId();
+        String id = contact.id;
         String[] projection = new String[] { Contacts.Phones.PERSON_ID };
         String path = null;
         Cursor result;
@@ -83,7 +83,7 @@ public class PhoneUtilDonut extends PhoneUtil {
             result = resolver.query(uri, projection, null, null, null);
         } else {
             String selection = "name='?' AND number='?'";
-            String[] selectionArgs = new String[] { contact.getName(), contact.getNumber() };
+            String[] selectionArgs = new String[] { contact.name, contact.number };
             result = resolver.query(Contacts.Phones.CONTENT_URI, projection, selection, selectionArgs, null);
         }
         if (null != result) {

@@ -4,34 +4,10 @@ import android.telephony.PhoneNumberUtils;
 
 public class Contact implements Comparable<Contact> {
 
-    private String id;
-    private String name;
-    private String number;
-    private String label;
-
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String id;
+    public String name;
+    public String number;
+    public String label;
 
     protected Contact(String id, String name, String number) {
         this.id = id;

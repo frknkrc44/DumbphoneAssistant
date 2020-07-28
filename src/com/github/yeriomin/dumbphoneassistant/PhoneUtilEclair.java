@@ -76,11 +76,11 @@ public class PhoneUtilEclair extends PhoneUtil {
     }
 
     public void create(Contact contact) throws Exception {
-        String name = contact.getName();
+        String name = contact.name;
         // Prevents previously placed phone type suffixes from being interpreted as part of the name
         if (name.charAt(name.length() - 2) == ',') {
             name = name.substring(0, name.length() - 2);
-            contact.setName(name);
+            contact.name = name;
         }
 
         ArrayList<ContentProviderOperation> ops = new ArrayList<>();
@@ -94,14 +94,14 @@ public class PhoneUtilEclair extends PhoneUtil {
                 .newInsert(ContactsContract.Data.CONTENT_URI)
                 .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                 .withValue(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, contact.getName())
+                .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, contact.name)
                 .build()
         );
         ops.add(ContentProviderOperation
                 .newInsert(ContactsContract.Data.CONTENT_URI)
                 .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                 .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, contact.getNumber())
+                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, contact.number)
                 .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
                 .build()
         );
@@ -119,7 +119,7 @@ public class PhoneUtilEclair extends PhoneUtil {
             if (uri.getPath().contains("people")) {
                 throw new Exception(String.valueOf(R.string.error_phone_number_not_stored));
             }
-            contact.setId(uri.getLastPathSegment());
+            contact.id = uri.getLastPathSegment();
         }
     }
 
@@ -133,9 +133,9 @@ public class PhoneUtilEclair extends PhoneUtil {
         String[] selectionArgs;
 
         // at first try to resolve with contacts id
-        if (contact.getId() != null) {
+        if (contact.id != null) {
             selection = PhoneLookup._ID + "=?";
-            selectionArgs = new String[] { contact.getId() };
+            selectionArgs = new String[] { contact.id };
             result = resolver.query(uri, projection, selection, selectionArgs, null);
             // check if unique result
             if (result.getCount() != 1) {
@@ -149,7 +149,7 @@ public class PhoneUtilEclair extends PhoneUtil {
             selection = ContactsContract.Contacts.DISPLAY_NAME + " = '?' AND "
                     + ContactsContract.CommonDataKinds.Phone.NUMBER + " = '?'"
             ;
-            selectionArgs = new String[] { contact.getName(), contact.getNumber() };
+            selectionArgs = new String[] { contact.name, contact.number };
             result = resolver.query(uri, projection, selection, selectionArgs, null);
             // check if unique result
             if (result.getCount() != 1) {

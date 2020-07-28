@@ -239,7 +239,7 @@ public class ManageContactsActivity extends TabActivity {
 
     private void copyToPhone(Contact contact) throws Exception {
 
-        Contact newPhoneContact = new Contact("", contact.getName(), contact.getNumber());
+        Contact newPhoneContact = new Contact("", contact.name, contact.number);
 
         // check, if already present on phone
         if (phoneContacts.contains(newPhoneContact)) {
@@ -295,8 +295,8 @@ public class ManageContactsActivity extends TabActivity {
 
             Contact contact = (Contact)this.getItem(position);
 
-            ((TextView)convertView.findViewById(R.id.text_contact_name)).setText(contact.getName());
-            ((TextView)convertView.findViewById(R.id.text_phone)).setText(contact.getNumber());
+            ((TextView)convertView.findViewById(R.id.text_contact_name)).setText(contact.name);
+            ((TextView)convertView.findViewById(R.id.text_phone)).setText(contact.number);
 
             return convertView;
         }
@@ -390,7 +390,7 @@ public class ManageContactsActivity extends TabActivity {
                         try {
                             Contact contact = (Contact) v.getTag();
                             copyToPhone(contact);
-                            message = getString(R.string.confirm_phone_contact_number_stored, contact.getName());
+                            message = getString(R.string.confirm_phone_contact_number_stored, contact.name);
                             update();
                         } catch (Exception e) {
                             message = e.getMessage();
@@ -410,7 +410,7 @@ public class ManageContactsActivity extends TabActivity {
                 @Override
                 public void onClick(View v) {
                     Contact contact = (Contact) v.getTag();
-                    String name = contact.getName() + " <" + contact.getNumber() + ">";
+                    String name = contact.name + " <" + contact.number + ">";
                     new AlertDialog.Builder(v.getContext())
                         .setCancelable(false)
                         .setMessage(getString(R.string.are_you_sure, name))
